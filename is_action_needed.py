@@ -2,13 +2,14 @@ import datetime
 import random as random
 from fetch_data import *
 
-#generate sample data to pick from
-initial_data = list(data)
+
 #print data[:5]
 test_data1 = get_data(0,30)
 #rint data[:5]
 
 test_data2 = get_data(1,0)
+
+test_data3 = get_data(8,0)
 
 #test_data3 = get_data(3,0) #add 'url' paramater to get_data function
 
@@ -50,7 +51,7 @@ def is_action_needed(data, person):
     final_diff = vote1_estimate - vote2_estimate
     final_dict = {'person': person}
 
-    if min_left > random.randint(660,840):
+    if min_left > 720:
         print "It is too early to determine if action is needed. There are still %s minutes left in Lent Madness today" % (min_left)
         return False
     elif vote1_estimate > vote2_estimate and person == 2:
@@ -87,9 +88,12 @@ def is_action_needed(data, person):
 
 
 
-expected_response = {'person':1,'votes':70,'minutes':9}
+expected_response = {'person':2,'votes':7289,'minutes':561}
 
 def test_answer():
-    assert is_action_needed(data,1) == expected_response
+    assert is_action_needed(test_data1,1) == False
+
+def test_action_is_needed():
+    assert is_action_needed(test_data3,2) == expected_response
 
 is_action_needed(test_data1,1)
