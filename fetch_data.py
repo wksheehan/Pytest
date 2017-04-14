@@ -10,8 +10,8 @@ def SeparateNamesFromVotes(inputString):
 
     return [ components[0], components[1] ]
 
-def GetDataFromWeb():
-    page = requests.get("http://mfl.williammck.net/poll/58d3dad399f5024018fde2d8")
+def GetDataFromWeb(url):
+    page = requests.get(url)
     soup = BeautifulSoup(page.text, "html.parser")
     table = soup.table
     rows = table.find_all('tr')
@@ -36,9 +36,8 @@ def GetDataFromWeb():
     return data
 
 
-
-def get_data(hours, minutes):
-    data = GetDataFromWeb()
+def get_data(hours, minutes, url):
+    data = GetDataFromWeb(url)
 
     end_time = data[0][0] + datetime.timedelta(hours=hours,minutes=minutes)
     test_data = []
@@ -48,7 +47,6 @@ def get_data(hours, minutes):
         else:
             pass
     #convert times to unix timestamp
-    print data[:5]
     for i in test_data:
         dt = i[0]
         i[0] = time.mktime(dt.timetuple())
@@ -56,5 +54,4 @@ def get_data(hours, minutes):
         str_i2 = i[2].encode('ascii')
         i[1] = int(str_i1)
         i[2] = int(str_i2)
-    print data[:5]
     return test_data

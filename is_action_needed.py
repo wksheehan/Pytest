@@ -2,21 +2,20 @@ import datetime
 import random as random
 from fetch_data import *
 
+#TEST DATA
+Scholastica_v_Augustine = "http://mfl.williammck.net/poll/58d3dad399f5024018fde2d8" #Poll 194
+Moses_v_Raymond = "http://mfl.williammck.net/poll/58da51fa99f50262ac984606" #Poll 190
+Florence_v_Henry = "http://mfl.williammck.net/poll/58d53e6499f502208e10cd97" #Poll 191
 
-#print data[:5]
-test_data1 = get_data(0,30)
-#rint data[:5]
-
-test_data2 = get_data(1,0)
-
-test_data3 = get_data(8,0)
-
-#test_data3 = get_data(3,0) #add 'url' paramater to get_data function
-
-#select which data set to use below
+too_early = get_data(0,30,Scholastica_v_Augustine)
+test_data2 = get_data(1,0,Scholastica_v_Augustine)
+test_data3 = get_data(8,0,Scholastica_v_Augustine)
 
 
 def is_action_needed(data, person):
+
+    print #adds space to see output more clearly
+
     last_time = data[-1][0]
 
     rates1 = []
@@ -40,6 +39,7 @@ def is_action_needed(data, person):
 
     average_rate1 = sum(rates1) / float(len(rates1))
     average_rate2 = sum(rates2) / float(len(rates2))
+
 
     now = datetime.datetime.fromtimestamp(last_time)
     eleven = datetime.datetime(now.year, now.month, now.day, 23)
@@ -86,14 +86,15 @@ def is_action_needed(data, person):
             final_dict.update(votes=add, minutes=min_left)
             return final_dict
 
+is_action_needed(test_data3,1)
 
-
+#PYTEST
 expected_response = {'person':2,'votes':7289,'minutes':561}
 
-def test_answer():
-    assert is_action_needed(test_data1,1) == False
+def test_action_not_needed():
+    assert is_action_needed(too_early,1) == False
+    assert is_action_needed(too_early,2) == False
+    assert is_action_needed(test_data3,1) == False
 
 def test_action_is_needed():
-    assert is_action_needed(test_data3,2) == expected_response
-
-is_action_needed(test_data1,1)
+    assert is_action_needed(test_data3,2) != False
