@@ -8,8 +8,9 @@ Moses_v_Raymond = "http://mfl.williammck.net/poll/58da51fa99f50262ac984606" #Pol
 Florence_v_Henry = "http://mfl.williammck.net/poll/58d53e6499f502208e10cd97" #Poll 191
 
 too_early = get_data(0,30,Scholastica_v_Augustine)
-test_data2 = get_data(1,0,Scholastica_v_Augustine)
-test_data3 = get_data(8,0,Scholastica_v_Augustine)
+test_data2 = get_data(1,30,Scholastica_v_Augustine)
+big_margin = get_data(8,0,Scholastica_v_Augustine)
+jank_test = get_data(13,30,Scholastica_v_Augustine)
 
 
 def is_action_needed(data, person):
@@ -25,6 +26,7 @@ def is_action_needed(data, person):
     deltavotes2 = []
 
     deltatime = []
+
     for i in range(len(data) - 1):
         deltavotes1.append(data[i + 1][1] - data[i][1])
         deltavotes2.append(data[i + 1][2] - data[i][2])
@@ -62,7 +64,7 @@ def is_action_needed(data, person):
         return final_dict
     elif vote1_estimate > vote2_estimate and person == 1:
         if final_diff > 2500:
-            print "No action is needed, person one is projected to win"
+            print "No action is needed, person one is projected to win by atleast 2500 votes"
             return False
         elif final_diff < 2500:
             add = int(final_diff * 1.5) + 2
@@ -86,7 +88,7 @@ def is_action_needed(data, person):
             final_dict.update(votes=add, minutes=min_left)
             return final_dict
 
-is_action_needed(test_data3,1)
+is_action_needed(jank_test,2)
 
 #PYTEST
 expected_response = {'person':2,'votes':7289,'minutes':561}
@@ -94,7 +96,7 @@ expected_response = {'person':2,'votes':7289,'minutes':561}
 def test_action_not_needed():
     assert is_action_needed(too_early,1) == False
     assert is_action_needed(too_early,2) == False
-    assert is_action_needed(test_data3,1) == False
+    assert is_action_needed(big_margin,1) == False
 
 def test_action_is_needed():
-    assert is_action_needed(test_data3,2) != False
+    assert is_action_needed(big_margin,2) != False
